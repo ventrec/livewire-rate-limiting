@@ -24,6 +24,50 @@ This package is tested to support the `file` and `redis` cache drivers, but not 
 
 ## Usage
 
+### Basic usage with attribute
+
+Use the `DanHarrin\LivewireRateLimiting\Attributes\RateLimit` attribute together with your Livewire method in order to easily rate limit a method (Throws a `DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException`):
+
+```php
+<?php
+
+namespace App\Http\Livewire\Login;
+
+use DanHarrin\LivewireRateLimiting\Attributes\RateLimit;
+use Livewire\Component;
+
+class Login extends Component
+{
+    #[RateLimit(maxAttempts: 10)]
+    public function submit()
+    {
+        // ...
+    }
+}
+```
+
+The RateLimit attribute also comes with built in support for displaying error messages instead of throwing an exception:
+
+```php
+<?php
+
+namespace App\Http\Livewire\Login;
+
+use DanHarrin\LivewireRateLimiting\Attributes\RateLimit;
+use Livewire\Component;
+
+class Login extends Component
+{
+    #[RateLimit(maxAttempts: 10, validationErrors: ['email' => 'Too many attempts...'])]
+    public function submit()
+    {
+        // ...
+    }
+}
+```
+
+### Advanced usage with full control of rate limiting
+
 Apply the `DanHarrin\LivewireRateLimiting\WithRateLimiting` trait to your Livewire component:
 
 ```php
